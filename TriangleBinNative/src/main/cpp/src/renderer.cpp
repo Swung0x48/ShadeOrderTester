@@ -288,10 +288,13 @@ void Renderer::drawRandomTris(int tricount) {
         }
         else { // size() < vtxcount
             std::uniform_real_distribution<float> distribution(-5.0, 5.0);
-            while (vbDataRandom.size() != vtxcount)
-            {
-                vtxData v {
-                    .pos = glm::vec4(distribution(gen), distribution(gen), -1, 1)
+            int vtxcount2add = vtxcount - vbDataRandom.size();
+            for (int i = 0; i < vtxcount2add; ++i) {
+                int tricount = vtxcount2add / 3;
+                int triidx = i / 3;
+                float z = (float)triidx / (float)tricount * 2. - 1.;
+                vtxData v{
+                    .pos = glm::vec4(distribution(gen), distribution(gen), z, 1)
                 };
                 v.pos.w = 1. - v.pos.x - v.pos.y - v.pos.z;
                 vbDataRandom.push_back(v);
