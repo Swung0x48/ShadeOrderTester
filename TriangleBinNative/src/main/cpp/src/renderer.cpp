@@ -42,10 +42,10 @@ uniform uint frags_to_shade;
 void main() {
     uint frags_shaded = atomicCounterIncrement(counter);
     if (frags_shaded > frags_to_shade) {
-        discard;
+        FragColor = vec4(0.);
     }
-
-    FragColor = color;
+    else {
+    FragColor = color; }
 }
 
 )sf";
@@ -287,16 +287,16 @@ void Renderer::drawRandomTris(int tricount) {
             vbDataRandom.resize(vtxcount);
         }
         else { // size() < vtxcount
-            std::uniform_real_distribution<float> distribution(-5.0, 5.0);
+            std::uniform_real_distribution<float> distribution(-1.0, 1.0);
             int vtxcount2add = vtxcount - vbDataRandom.size();
             for (int i = 0; i < vtxcount2add; ++i) {
                 int tricount = vtxcount2add / 3;
                 int triidx = i / 3;
                 float z = (float)triidx / (float)tricount * 2. - 1.;
                 vtxData v{
-                    .pos = glm::vec4(distribution(gen), distribution(gen), z, 1)
+                    .pos = glm::vec4(distribution(gen), distribution(gen), z, 1.)
                 };
-                v.pos.w = 1. - v.pos.x - v.pos.y - v.pos.z;
+                //v.pos.y = 1. - v.pos.x - v.pos.z - v.pos.w;
                 vbDataRandom.push_back(v);
             }
         }
